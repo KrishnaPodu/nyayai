@@ -4,7 +4,7 @@
 # then:
 # pip install -r requirements.txt
 
-pymupdf==1.27.2
+pdfplumber
 pdf2image==1.17.0
 surya-ocr==0.9.3
 

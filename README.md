@@ -39,42 +39,61 @@ show in browser with React
 
 ## folder structure
 
+this is what actually exists on disk right now, not the final planned structure.
+more files get added as each phase progresses (see phase plan doc for order).
+
 ```
 NyayAI/
 │
 ├── ocr/
-│   ├── extractor.py        word extraction from PDF pages (pymupdf + surya)
-│   └── router.py           decides which extractor to use per page
+│   ├── __init__.py
+│   ├── tokens.py            WordToken dataclass, shared by everything below
+│   └── native_extractor.py  NativeExtractor - pulls text from pdfs that already have a text layer
+│                            (surya_extractor.py and router.py not built yet)
+│
+├── model/                   empty for now, InLegalBERT pipeline goes here next
+│
+├── test_deps.py             checks pinned versions actually installed correctly
+├── test_gpu.py              checks torch can see the gpu before doing anything heavy
+└── README.md
+```
+
+planned but not built yet (coming up in order):
+
+```
+├── ocr/
+│   ├── surya_extractor.py   SuryaExtractor for scanned pages
+│   └── pipeline.py          combines native + surya behind one extract() call
 │
 ├── model/
-│   ├── checkpoint/         trained model goes here (not in git, too big)
-│   └── detector.py         runs InLegalBERT inference on extracted words
+│   ├── checkpoint/          trained model goes here (not in git, too big)
+│   └── detector.py          runs InLegalBERT inference on extracted words
 │
 ├── api/
-│   └── main.py             FastAPI server - handles uploads and job status
+│   └── main.py              FastAPI server - handles uploads and job status
 │
 ├── frontend/
 │   └── src/
 │       ├── App.jsx
 │       ├── UploadPage.jsx
-│       └── ResultPage.jsx  shows the annotated PDF with highlights
+│       └── ResultPage.jsx   shows the annotated PDF with highlights
 │
 ├── scripts/
-│   ├── generate_data.py    makes training data from IL-TUR dataset
-│   └── train.py            fine-tunes InLegalBERT
+│   ├── generate_data.py     makes training data from IL-TUR dataset
+│   └── train.py             fine-tunes InLegalBERT
 │
 ├── data/
-│   ├── raw_pdfs/           uploaded pdfs (temp storage)
-│   └── training_data/      train.jsonl, val.jsonl, test.jsonl
+│   ├── raw_pdfs/            uploaded pdfs (temp storage)
+│   └── training_data/       train.jsonl, val.jsonl, test.jsonl
 │
 ├── tests/
 │   └── test_ocr.py
 │
-├── config.py               all settings in one place
-├── main.py                 quick cli test script
+├── config.py                all settings in one place
+├── main.py                  quick cli test script
 ├── requirements.txt
 ├── .env.example
-└── docker-compose.yml      runs qdrant + redis (need these running)
+└── docker-compose.yml       runs qdrant + redis (need these running)
 ```
 
 ---
