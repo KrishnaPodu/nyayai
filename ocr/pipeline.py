@@ -1,23 +1,17 @@
 """
 single entrypoint for the entire OCR pipeline.
-calls router to split pages, then runs the right extractor on each.
-surya is only loaded if at least one page needs it.
+calls router which extracts native spans + identifies scanned pages
+in one pass, then only calls surya on pages that actually need it.
 """
 
 from ocr.tokens import LineSpan
-from ocr.native_extractor import NativeExtractor
 from ocr.router import route
 
 
-def extract(pdf_path: str, min_chars_per_page: int = 20) -> list[LineSpan]:
-    native_pages, scanned_pages = route(pdf_path, min_chars_per_page)
+def extract(pdf_path: str, min_chars_per_page: int = 2000) -> list[LineSpan]:
+    native_spans, scanned_pages = route(pdf_path, min_chars_per_page)
 
-    spans = []
-
-    if native_pages:
-        native = NativeExtractor()
-        all_spans = native.extract(pdf_path)
-        spans.extend(s for s in all_spans if s.page_no in set(native_pages))
+    spans = list(native_spans)
 
     if scanned_pages:
         # lazy import so surya models only load when actually needed
