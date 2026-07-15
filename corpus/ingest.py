@@ -5,12 +5,15 @@ called by scripts/ingest_corpus.py.
 
 from pathlib import Path
 
+from surya import settings
+
 from corpus.parser import parse_act
 from corpus.chunker import chunk_sections
 from corpus.embeddings import PassageEmbedder
 from corpus.uploader import get_client, ensure_collection, drop_act, upload_passages
+from config.settings import settings
 
-SOURCE_DIR = Path("corpus/sources")
+SOURCE_DIR = settings.corpus_sources_dir  # Path to the directory containing act PDFs
 
 
 def ingest_act(act: str, force: bool = False, embedder: PassageEmbedder | None = None) -> int:

@@ -6,13 +6,15 @@ standard trick for pulling a "sentence embedding" out of a BERT-family
 model that wasn't specifically trained with a pooling objective.
 """
 
+from asyncio import constants
+
 import torch
 from transformers import AutoTokenizer, AutoModel
 
 from corpus.schemas import Passage
-
-MODEL_NAME = "law-ai/InLegalBERT"
-BATCH_SIZE = 16  # same 6GB VRAM discipline as OCR/model inference - keep it small
+from config import constants
+MODEL_NAME = constants.MODEL_NAME  # "nlpaueb/legal-bert-base-uncased"
+BATCH_SIZE = constants.BATCH_SIZE  # same 6GB VRAM discipline as OCR/model inference - keep it small
 
 
 class PassageEmbedder:

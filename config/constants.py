@@ -18,3 +18,10 @@ ERROR_COLORS = {
     "citation": "#FF4444",
     "entity": "#00BFFF",
 }
+
+# Embeddings constants for corpus/embeddings.py
+MODEL_NAME = "law-ai/InLegalBERT"
+BATCH_SIZE = 16
+
+# acts for parsing and chunking
+ACTS = ["ipc", "bns", "bnss", "cpc", "constitution"]

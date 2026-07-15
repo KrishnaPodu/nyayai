@@ -11,8 +11,9 @@ import argparse
 
 from corpus.ingest import ingest_act
 from corpus.embeddings import PassageEmbedder
+from config.constants import ACTS
 
-ALL_ACTS = ["ipc", "bns", "bnss", "cpc", "constitution"]
+ALL_ACTS = ACTS
 
 
 def main():

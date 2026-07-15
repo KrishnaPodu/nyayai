@@ -10,6 +10,7 @@ IPC/BNS/BNSS/CPC. only the Constitution (Part -> Chapter -> Article) needs
 a fully separate implementation, in parsers/constitution.py.
 """
 
+from pydoc import text
 import re
 from abc import ABC, abstractmethod
 from pathlib import Path
@@ -25,6 +26,10 @@ class BaseParser(ABC):
     @abstractmethod
     def parse(self, pdf_path: Path) -> list[Section]:
         ...
+
+    def preprocess(self, text: str) -> str:  
+        """override in subclasses for act-specific preprocessing. default: no changes."""
+        return text
 
     @staticmethod
     def extract_raw_text(pdf_path: Path) -> str:
@@ -87,7 +92,8 @@ class ChapterSectionParser(BaseParser):
 
     def parse(self, pdf_path: Path) -> list[Section]:
         raw_text = self.extract_raw_text(pdf_path)
-        return self._split_into_sections(raw_text)
+        text = self.preprocess(raw_text)
+        return self._split_into_sections(text)
 
     def extra_metadata(self, number: str) -> dict:
         """override in subclasses for act-specific extras. default: nothing extra."""
